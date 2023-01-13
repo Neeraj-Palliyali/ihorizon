@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <div class="container pt-3">
+        
+        <div class="row justify-content-md-center">
+        <div class="row">
+            <div class="col">
+                <p class="h3 mb-2">
+                Ihorizon
+            </div>
+            <div class="col-md-auto">
+                <button type="button" class="btn btn-outline-primary">Primary</button>
+            </div>
+            <div class="col col-lg-2">
+                <button type="button" class="btn btn-primary">Primary</button>
+            </div>
+        </div>
+    </div>
+    <div class="container p-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="POST">
+                    {% csrf_token %}
+                    {% comment %} {{ form|crispy }} {% endcomment %}
+                    <div class="card bg-light mb-3  rounded-0" >
+                        <div class="card-body">
+                          <h5 class="card-title">Request Information</h5>
+                          <p class="card-text">{{form.summary|as_crispy_field}}</p>
+                          <p class="card-text">{{form.description|as_crispy_field}}</p>
+                          {{form.priority_flag|as_crispy_field}}
+                          {% comment %} <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="customSwitch1" checked>
+                            <label class="custom-control-label" for="customSwitch1"></label>
+                          </div> {% endcomment %}
+                        <button type="submit" class="btn btn-block btn-primary">Create support request</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
