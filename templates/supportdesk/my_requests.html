@@ -1,0 +1,100 @@
+{% extends 'base.html' %} {% load crispy_forms_tags %} {% block content %}
+
+<div class="container pt-4">
+  <div class="row justify-content-md-center">
+    <div class="row">
+      <div class="col">
+        <img
+          src="https://uploads-ssl.webflow.com/62fc7544b2fc768dd0d052e6/62fc7c0bd02ef3d093c765d0_dark_ihorizon.svg"
+        />
+      </div>
+
+      <div class="col-md-auto">
+        <button type="button" class="btn btn-outline-primary">Primary</button>
+      </div>
+      <div class="col col-lg-2">
+        <button type="button" class="btn btn-primary">asdfsad</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container pt-3">
+  <p class="h3 mb-2">My requests</p>
+</div>
+{% for requests in myrequests %}
+
+<div class="container pt-3">
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          {{ requests.summary }} {% if requests.priority_flag %}
+          <span class="badge badge-pill badge-danger text-capitalize"
+            >High Priority</span
+          >
+          {% endif %}
+          {% if requests.status == 'I'%}
+            <span class="badge badge-pill badge-primary float-right text-lowercase">In progress</span>
+          {% else %}
+          <span  class="badge badge-pill badge-success  float-right text-capitalize">Completed</span>   
+          {% endif %}
+        </h5>
+
+        <p class="card-text">{{ requests.description }}</p>
+        <p class="card-text">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-calendar"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"
+            />
+          </svg>
+          <small class="text-muted font-weight-bolder ml-1"
+            >Created {{ requests.get_lifetime }} days ago</small
+          >
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-person-fill ml-3"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+            />
+          </svg>
+        </p>
+      </div>
+      {% comment %}
+    </div>
+    {% endcomment %}
+  </div>
+</div>
+{% endfor %} 
+
+{% if is_paginated %}
+<div class="container pt-3">
+<div class="pagination">
+    <span class="page-links">
+        {% if page_obj.has_previous %}
+            <a href="/supportdesk/my_requests?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="page-current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+        {% if page_obj.has_next %}
+            <a href="/supportdesk/my_requests?page={{ page_obj.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,9 +1,10 @@
 from django.urls import path
-from . import views
+from .views import RegisterView, PlaceholderHome, MyRequestsView
 
 urlpatterns = [
     path(
-        "placeholder/", views.PlaceholderHome.as_view(), name="supportdesk_placeholder"
+        "placeholder/", PlaceholderHome.as_view(), name="supportdesk_placeholder"
     ),
-    path("request/", views.RegisterView.as_view(), name = "request")
+    path("request/", RegisterView.as_view(), name = "request"),
+    path("my_requests/", MyRequestsView.as_view(), name="myrequests")
 ]

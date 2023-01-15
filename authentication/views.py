@@ -1,6 +1,6 @@
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
 
 from . import forms
@@ -19,7 +19,7 @@ class RegisterView(FormView):
 class LoginView(FormView):
     template_name = "auth/login.html"
     form_class = forms.LoginForm
-    success_url = reverse_lazy("supportdesk_placeholder")
+    success_url = reverse_lazy("request")
 
     def form_valid(self, form):
         username = form.cleaned_data.get("username")
@@ -28,6 +28,7 @@ class LoginView(FormView):
         user = authenticate(username=username, password=password)
 
         if user is not None:
+            login(self.request, user=user)
             return super().form_valid(form)
         else:
             return super().form_invalid(form)

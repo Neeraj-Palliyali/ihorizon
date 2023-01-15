@@ -1,47 +1,88 @@
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
+{% extends 'base.html' %} {% load crispy_forms_tags %} {% block content %}
 
-{% block content %}
+<div class="container pt-3">
+  <div class="row justify-content-md-center">
+    <div class="row">
+      <div class="col">
+        <p class="h3 mb-2">Ihorizon</p>
+      </div>
 
-    <div class="container pt-3">
-        
-        <div class="row justify-content-md-center">
-        <div class="row">
-            <div class="col">
-                <p class="h3 mb-2">
-                Ihorizon
-            </div>
-            <div class="col-md-auto">
-                <button type="button" class="btn btn-outline-primary">Primary</button>
-            </div>
-            <div class="col col-lg-2">
-                <button type="button" class="btn btn-primary">Primary</button>
-            </div>
-        </div>
+      <div class="col-md-auto">
+        <button type="button" class="btn btn-outline-primary">Primary</button>
+      </div>
+      <div class="col col-lg-2">
+        <button type="button" class="btn btn-primary">Primary</button>
+      </div>
     </div>
-    <div class="container p-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <form method="POST">
-                    {% csrf_token %}
-                    {% comment %} {{ form|crispy }} {% endcomment %}
-                    <div class="card bg-light mb-3  rounded-0" >
-                        <div class="card-body">
-                          <h5 class="card-title">Request Information</h5>
-                          <p class="card-text">{{form.summary|as_crispy_field}}</p>
-                          <p class="card-text">{{form.description|as_crispy_field}}</p>
-                          {{form.priority_flag|as_crispy_field}}
-                          {% comment %} <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="customSwitch1" checked>
-                            <label class="custom-control-label" for="customSwitch1"></label>
-                          </div> {% endcomment %}
-                        <button type="submit" class="btn btn-block btn-primary">Create support request</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+  </div>
+  {% if not user.is_authenticated %}
+  <div class="row justify-content-center mt-4">
+    <div class="card float-middle" style="width: 18rem">
+      <div class="card-body">
+        <h5 class="card-title">Please login!!</h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+          Please login to a customer account to create requests
+        </h6>
+
+        <a href="/auth/register" class="card-link">Register</a>
+        <a href="/auth/login" class="card-link">Login</a>
+      </div>
     </div>
+  </div>
+</div>
 
+{% elif user.is_staff %}
+<div class="row justify-content-center mt-4">
+  <div class="card float-middle" style="width: 18rem">
+    <div class="card-body">
+      <h5 class="card-title">You have a staff account!!</h5>
+      <h6 class="card-subtitle mb-2 text-muted">
+        Please login to a customer account to create requests
+      </h6>
 
-{% endblock %}
+      <a href="/auth/register" class="card-link">Register</a>
+      <a href="/auth/login" class="card-link">Login</a>
+    </div>
+  </div>
+</div>
+{% elif user.is_superuser %}
+<div class="row justify-content-center mt-4">
+  <div class="card float-middle" style="width: 18rem">
+    <div class="card-body">
+      <h5 class="card-title">You have a Admin account!!</h5>
+      <h6 class="card-subtitle mb-2 text-muted">
+        Please login to a customer account to create requests
+      </h6>
+
+      <a href="/auth/register" class="card-link">Register</a>
+      <a href="/auth/login" class="card-link">Login</a>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="container p-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="card bg-light mb-3 rounded-0">
+          <div class="card-body">
+            <h5 class="card-title">Request Information</h5>
+            <p class="card-text">{{form.summary|as_crispy_field}}</p>
+            <p class="card-text">{{form.description|as_crispy_field}}</p>
+            {{form.priority_flag|as_crispy_field}} {{form.user.as_hidden}}
+            <script>
+              var name = {{ user.id }};
+              document.getElementById("id_user").value = name;
+            </script>
+            <button type="submit" class="btn btn-block btn-primary">
+              Create support request
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endif %} {% endblock %}
