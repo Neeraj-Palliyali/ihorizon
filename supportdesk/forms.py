@@ -9,7 +9,7 @@ class RequestForm(forms.ModelForm):
                                 widget=forms.TextInput(
                                     attrs={'placeholder': "Unable to login to application"}))
     description = forms.Field(label="Description", widget=forms.Textarea, required=True)
-    priority_flag = forms.BooleanField(label="Priority")
+    priority_flag = forms.BooleanField(label="Priority", required=False)
     user = forms.CharField(required=False)
     class Meta:
         model = RequestModel
@@ -18,4 +18,8 @@ class RequestForm(forms.ModelForm):
     def clean_user(self):
         data = self.cleaned_data['user']
         data = User.objects.get(id = data)
+        return data
+    
+    def clean_priority_flag(self):
+        data = self.cleaned_data['priority_flag']
         return data

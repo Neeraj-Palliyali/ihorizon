@@ -25,6 +25,8 @@ class RegisterView(FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         context = self.get_context_data(**kwargs)
+
+        # To get the count of requests a user already have
         user_request_count = RequestModel.objects.filter(user=self.request.user.id).count()
         context['form'] = form
         context['user_request_count'] =user_request_count

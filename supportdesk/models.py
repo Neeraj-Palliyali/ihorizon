@@ -36,6 +36,7 @@ class RequestModel(models.Model):
     
     @property
     def get_asignee(self)->str:
+        # An assignee(agent) is only set when either the user looks at the requests or the admin assigns it to a staff 
         # To get and assign the request to a staff
         if self.assignee:
             return self.assignee.username 
