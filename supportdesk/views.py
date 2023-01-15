@@ -45,21 +45,22 @@ class MyRequestsView(ListView):
         ).order_by('-created_at')
 
 
-class StaffRequestsView(ListView):
+class StaffRequestsView(View):
     template_name = "supportdesk/staff_requests.html"
-    model = RequestModel
-    context_object_name = "staff_requests"
-    paginate_by = 3
     
     def get(self, request):
         staff_requests = RequestModel.objects.filter(
             assignee=self.request.user,
-        ).order_by('-created_at')
-
+            status = "I"
+        ).order_by('-updated_at')
+        staff_completed = RequestModel.objects.filter(
+            assignee=self.request.user,
+            status = "C"
+        ).order_by('-updated_at')
         # sending completed and in progress requests
         return render ( request, "supportdesk/staff_requests.html", context={
-            "staff_requests":staff_requests.filter(status = "I"),
-            "staff_completed":staff_requests.filter(status = "C"),
+            "staff_requests":staff_requests,
+            "staff_completed":staff_completed,
         } )
 
     def post(self, request ):
@@ -79,13 +80,18 @@ class StaffRequestsView(ListView):
             # changing the staff
             single_request.assignee = staff
             single_request.save()
-            context_requests = RequestModel.objects.filter(
-                    assignee=self.request.user
-                                ).order_by('-created_at')   
+            staff_requests = RequestModel.objects.filter(
+                                assignee=self.request.user,
+                                status = "I"
+                            ).order_by('-updated_at')
+            staff_completed = RequestModel.objects.filter(
+                            assignee=self.request.user,
+                            status = "C"
+                        ).order_by('-updated_at')
             context = {
-                "staff_requests":context_requests
+                "staff_requests":staff_requests,
+                "staff_completed":staff_completed
             }
-
             return render(request, "supportdesk/staff_requests.html", context)
 
         # changing to completed status
@@ -94,12 +100,18 @@ class StaffRequestsView(ListView):
                 # finding request
                 single_request =  RequestModel.objects.get(pk=request_id, assignee_id = request.user.id)
             except RequestModel.DoesNotExist:
-                return render(request, "supportdesk/unauthorized.html")
-            context_requests = RequestModel.objects.filter(
-                    assignee=self.request.user
-                                ).order_by('-created_at')   
+                return render(request, "supportdesk/unauthorized.html")  
+            staff_requests = RequestModel.objects.filter(
+                                assignee=self.request.user,
+                                status = "I"
+                            ).order_by('-updated_at')
+            staff_completed = RequestModel.objects.filter(
+                            assignee=self.request.user,
+                            status = "C"
+                        ).order_by('-updated_at')
             context = {
-                "staff_requests":context_requests
+                "staff_requests":staff_requests,
+                "staff_completed":staff_completed
             }
             # changing state
             single_request.status = "C"

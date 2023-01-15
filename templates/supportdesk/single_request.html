@@ -23,7 +23,7 @@
         <div class="col col-lg-3">
 
           {% if single_request.status == "I" %}
-          <form action="{% url " single_request" single_request.id %}" method="POST">
+          <form action="{% url "single_request" single_request.id %}" method="POST">
             {% csrf_token %}
             <button class="btn btn-sm btn-success ">Mark as completed</button>
           </form>

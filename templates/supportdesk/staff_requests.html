@@ -20,7 +20,7 @@
   <div class="card rounded-0">
     <div class="card-body">
 
-      <a href="{% url " single_request" requests.id %}">
+      <a href="{% url "single_request" requests.id %}">
         <h5 class="card-title mb-1">
           {{ requests.summary }} 
           
@@ -42,16 +42,23 @@
         </p>
       </a>
       <div class="row">
-        <form action="{% url " staff_requests" %}" method="POST">
-          <input type="hidden" name="reassign" value="{{requests.id}}" />
+        <form action="{% url "staff_requests" %}" method="POST">
+          
           {% csrf_token %}
-          <button class="btn mr-2 ml-2 btn-sm btn-outline-primary" onclick="refreshPage();">Reassign to someone</button>
+          <button class="btn mr-2 ml-2 btn-sm btn-outline-primary" onclick="location.href='{% url 'staff_requests' %}">
+            <input type="hidden" name="reassign" value="{{requests.id}}" />
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi mr-1 bi-person-fill"
+              viewBox="0 0 16 16">
+                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+              </svg>
+            Reassign to someone
+          </button>
         </form>
 
-        <form action="{% url " staff_requests" %}" method="POST">
+        <form action="{% url "staff_requests" %}" method="POST">
           <input type="hidden" name="request_id" value="{{requests.id}}" />
           {% csrf_token %}
-          <button class="btn btn-sm btn-success" onclick="refreshPage();">Mark as completed</button>
+          <button class="btn btn-sm btn-success" onclick="location.href='{% url 'staff_requests' %}">Mark as completed</button>
         </form>
 
       </div>
@@ -63,7 +70,7 @@
   <div class="card rounded-0">
     <div class="card-body ">
 
-      <a href="{% url " single_request" requests.id %}">
+      <a href="{% url "single_request" requests.id %}">
         <h5 class="card-title mb-1">
           {{ requests.summary }} 
           
