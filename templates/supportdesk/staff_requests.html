@@ -93,7 +93,7 @@
   </div>
   {% endfor %}
 
-  {% if is_paginated %}
+  {% comment %} {% if is_paginated %}
   <div class="container pt-3">
     <div class="pagination">
       <span class="page-links">
@@ -110,7 +110,7 @@
       </span>
     </div>
   </div>
-  {% endif %}
+  {% endif %} {% endcomment %}
 
   {% else %}
   <div class="row justify-content-center mt-4">
