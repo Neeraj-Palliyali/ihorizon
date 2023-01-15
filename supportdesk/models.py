@@ -11,7 +11,8 @@ class RequestModel(models.Model):
     summary = models.CharField(verbose_name="Summary", max_length=100, blank=False)
     description = models.TextField(verbose_name="Description", blank=False)
     priority_flag = models.BooleanField(default=False)
-    user = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, blank=False, on_delete=models.CASCADE, related_name="user")
+    assignee = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING, related_name="assignee")
     status = models.CharField(choices=STATUS_CHOICES, default=STATUS_CHOICES[0][0], max_length=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at  = models.DateTimeField(auto_now=True)
@@ -22,3 +23,17 @@ class RequestModel(models.Model):
     @property
     def get_lifetime(self) -> datetime:
         return (datetime.now(timezone.utc) - self.created_at).days
+    
+    @property
+    def get_asignee(self)->str:
+        # To get and assign the request to a staff
+        if self.assignee:
+            return self.assignee.username 
+
+        else:
+            assignee =  User.objects.filter(is_staff = True).order_by('?').first()
+            self.assignee = assignee
+            self.save()
+            return self.assignee.username
+
+

@@ -1,10 +1,9 @@
 from django import forms
 from .models import RequestModel
-from crispy_forms.helper import FormHelper, Layout
 from django.contrib.auth.models import User
-from crispy_forms.layout import Field
 
 class RequestForm(forms.ModelForm):
+    # Form for a reqyest
     summary = forms.CharField(label="Summary", 
                                 max_length=100, 
                                 widget=forms.TextInput(
@@ -20,11 +19,3 @@ class RequestForm(forms.ModelForm):
         data = self.cleaned_data['user']
         data = User.objects.get(id = data)
         return data
-
-
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.helper = FormHelper(self)
-    #     # self.helper.layout = Layout(
-    #     #     Field('notify_faculty_field', css_class="form-check-input", wrapper_class="form-check form-switch"),
-    #     # )
