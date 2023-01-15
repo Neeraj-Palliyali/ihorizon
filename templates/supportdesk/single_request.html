@@ -18,7 +18,7 @@
               <span class="badge badge-pill badge-danger text-capitalize">High Priority</span>
             {% endif %}
               </div>
-            <div class="col col-lg-2">
+            <div class="col col-lg-3">
               
             {% if single_request.status == "I" %}
             <form action= "{% url "single_request" single_request.id %}" method="POST">
