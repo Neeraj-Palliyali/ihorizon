@@ -1,60 +1,67 @@
 {% extends 'base.html' %} {% load crispy_forms_tags %} {% block content %}
-       
-    {% if single_request.assignee.id ==  user.id %}
-    <div class="container pt-3">
-        
-        <div class="card-body">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16" onClick="javascript:history.go(-1);"    >
-                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-            </svg> 
 
-          <h5 class="card-title mb-1">
-            <div class="row">
-              <div class="col">
-              {{ single_request.summary }} 
-              {% comment %} </div>
-              <div class="col"> {% endcomment %}
-            {% if single_request.priority_flag %} 
-              <span class="badge badge-pill badge-danger text-capitalize">High Priority</span>
-            {% endif %}
-              </div>
-            <div class="col col-lg-3">
-              
-            {% if single_request.status == "I" %}
-            <form action= "{% url "single_request" single_request.id %}" method="POST">
-                {% csrf_token %}
-                <button class="btn btn-sm btn-success ">Mark as completed</button>
-            </form>
-            {% else %}
-            <span class="badge badge-pill badge-success text-capitalize">Completed</span>
-            {% endif %}
-            </div>
-          </h5>
+{% if single_request.assignee.id == user.id %}
+<div class="container pt-3">
 
+  <div class="card-body">
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left"
+      viewBox="0 0 16 16" onClick="javascript:history.go(-1);">
+      <path fill-rule="evenodd"
+        d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+    </svg>
+
+    <h5 class="card-title mb-1">
+      <div class="row">
+        <div class="col">
+          {{ single_request.summary }}
+
+          {% if single_request.priority_flag %}
+          <span class="badge badge-pill badge-danger text-capitalize">High Priority</span>
+          {% endif %}
+
+        </div>
+        <div class="col col-lg-3">
+
+          {% if single_request.status == "I" %}
+          <form action="{% url " single_request" single_request.id %}" method="POST">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-success ">Mark as completed</button>
+          </form>
           
-          <p class="card-text">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
-              <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
-            </svg>
-            <small class="text-muted font-weight-bolder ml-1">Created {{ single_request.get_lifetime }} ago</small>
-
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill ml-3" viewBox="0 0 16 16">
-              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-            </svg>
-            <small class="text-muted font-weight-bolder ml-1">Assigned to {{ single_request.get_asignee }} (Agent)</small>
-          </p>
-          <p class="card-text">{{ single_request.description }}</p>
+          {% else %}
+          <span class="badge badge-pill badge-success text-capitalize">Completed</span>
+          {% endif %}
         </div>
+    </h5>
+
+
+    <p class="card-text">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar"
+        viewBox="0 0 16 16">
+        <path
+          d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+      </svg>
+      <small class="text-muted font-weight-bolder ml-1">Created {{ single_request.get_lifetime }} ago</small>
+
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill ml-3"
+        viewBox="0 0 16 16">
+        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+      </svg>
+      <small class="text-muted font-weight-bolder ml-1">Assigned to {{ single_request.get_asignee }} (Agent)</small>
+    </p>
+    <p class="card-text">{{ single_request.description }}</p>
+  </div>
+</div>
+
+{% else %}
+<div class="row justify-content-center mt-4">
+  <div class="card float-middle" style="width: 18rem">
+    <div class="card-body">
+      <h5 class="card-title">You cannot access this !!</h5>
     </div>
-    {% else %}
-    <div class="row justify-content-center mt-4">
-        <div class="card float-middle" style="width: 18rem">
-          <div class="card-body">
-            <h5 class="card-title">You cannot access this !!</h5>   
-          </div>
-        </div>
-      </div>
-    {% endif %}
+  </div>
+</div>
+{% endif %}
 
-  
+
 {% endblock %}
