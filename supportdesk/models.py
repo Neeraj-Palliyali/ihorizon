@@ -21,8 +21,18 @@ class RequestModel(models.Model):
         return self.summary + "|" + str(self.user.first_name) + "|" + str(self.created_at.date())
     
     @property
-    def get_lifetime(self) -> datetime:
-        return (datetime.now(timezone.utc) - self.created_at).days
+    def get_lifetime(self) -> str:
+        time_gap = datetime.now(timezone.utc) - self.created_at
+        if time_gap.days<=0:
+            if (time_gap.seconds/(60**2))<=1:
+                if (time_gap.seconds/(60))<=1:
+                    return str(int(time_gap.seconds)) + " Seconds "
+                else:
+                    return str(int(time_gap.seconds/60)) + " Minutes "
+            else:
+                return str(int(time_gap.seconds/(60**2))) + " Minutes "
+        else:
+            return str(time_gap.days) + " days "
     
     @property
     def get_asignee(self)->str:

@@ -1,19 +1,19 @@
 {% extends 'base.html' %} {% load crispy_forms_tags %} {% block content %}
 
-<div class="container pt-3">
-  <div class="row justify-content-md-center">
-    <div class="row">
-      <div class="col">
-        <p class="h3 mb-2">Ihorizon</p>
+  <div class="container pt-4">
+      <div class="row">
+        <div class="col">
+          <img src="https://uploads-ssl.webflow.com/62fc7544b2fc768dd0d052e6/62fc7c0bd02ef3d093c765d0_dark_ihorizon.svg" />
+        </div>
+        
+        <div class="col-md-auto">
+          <button type="button" class="btn btn-outline-primary" onclick="location.href='{% url 'myrequests' %}'">My requests ({{ user_request_count }})</button>
+        </div>
+        <div class="col-md-auto float-right">
+          <button type="button" class="btn btn-primary" onclick="location.href='{% url 'request' %}'">+ New request</button>
+        </div>
       </div>
-
-      <div class="col-md-auto">
-        <button type="button" class="btn btn-outline-primary">Primary</button>
-      </div>
-      <div class="col col-lg-2">
-        <button type="button" class="btn btn-primary">Primary</button>
-      </div>
-    </div>
+  </div>
   </div>
   {% if not user.is_authenticated %}
   <div class="row justify-content-center mt-4">
@@ -83,6 +83,6 @@
         </div>
       </form>
     </div>
-  </div>
+
 </div>
 {% endif %} {% endblock %}

@@ -15,9 +15,11 @@
   <div class="container pt-3">
   {% if user.is_authenticated and user.is_staff%}
   {% for requests in staff_requests %}
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">
+  <div class="card rounded-0">
+    <div class="card-body ">
+
+          <a href="{% url "single_request" requests.id %}" >
+          <h5 class="card-title mb-1">
             {{ requests.summary }} {% if requests.priority_flag %}
               <span class="badge badge-pill badge-danger text-capitalize">High Priority</span>
             {% endif %}
@@ -27,15 +29,16 @@
               <span class="badge badge-pill badge-success float-right text-capitalize">Completed</span>
             {% endif %}
           </h5>
-            <p class="card-text">{{ requests.description }}</p>
-            <p class="card-text">
-              <small class="text-muted font-weight-bolder">Quick actions</small>
-            </p>
+          <p class="card-text text-dark" >{{ requests.description }}</p>
+          <p class="card-text">
+            <small class="text-muted font-weight-bolder">Quick actions</small>
+          </p>
+        </a>
             <div class="row">
             <form action= "{% url "staff_requests" %}" method="POST">
               <input type="hidden" name="reassign" value="{{requests.id}}" />
               {% csrf_token %}
-              <button class="btn mr-2 ml-2 btn-sm btn-outline-primary" onclick="refreshPage();">Reassign</button>
+              <button class="btn mr-2 ml-2 btn-sm btn-outline-primary" onclick="refreshPage();">Reassign to someone</button>
             </form>
             
             <form action= "{% url "staff_requests" %}" method="POST">
@@ -44,11 +47,31 @@
               <button class="btn btn-sm btn-success" onclick="refreshPage();">Mark as completed</button>
             </form>
       
-
         </div>
       </div>
     </div>
   {% endfor %}
+    {% for requests in staff_completed %}
+    <div class="card rounded-0">
+      <div class="card-body ">
+  
+            <a href="{% url "single_request" requests.id %}" >
+            <h5 class="card-title mb-1">
+              {{ requests.summary }} {% if requests.priority_flag %}
+                <span class="badge badge-pill badge-danger text-capitalize">High Priority</span>
+              {% endif %}
+              {% if requests.status == 'I' %}
+                <span class="badge badge-pill badge-primary float-right text-lowercase">In progress</span>
+              {% else %}
+                <span class="badge badge-pill badge-success float-right text-capitalize">Completed</span>
+              {% endif %}
+            </h5>
+            <p class="card-text text-dark" >{{ requests.description }}</p>
+
+          </a>
+        </div>
+      </div>
+    {% endfor %}
 
   {% if is_paginated %}
     <div class="container pt-3">

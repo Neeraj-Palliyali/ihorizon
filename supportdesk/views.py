@@ -4,7 +4,6 @@ from django.views.generic import ListView, View
 from django.views.generic.edit import FormView
 from django.contrib.auth.models import User
 
-from django.urls import reverse
 from django.urls import reverse_lazy
 
 from .forms import RequestForm
@@ -21,6 +20,15 @@ class RegisterView(FormView):
         # creating request for user
         form.save()
         return redirect(self.success_url)
+    
+    def get(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        context = self.get_context_data(**kwargs)
+        user_request_count = RequestModel.objects.filter(user=self.request.user.id).count()
+        context['form'] = form
+        context['user_request_count'] =user_request_count
+        return self.render_to_response(context)
 
 class MyRequestsView(ListView):
     template_name = "supportdesk/my_requests.html"
@@ -43,10 +51,13 @@ class StaffRequestsView(ListView):
     
     def get(self, request):
         staff_requests = RequestModel.objects.filter(
-            assignee=self.request.user
+            assignee=self.request.user,
         ).order_by('-created_at')
+
+        # sending completed and in progress requests
         return render ( request, "supportdesk/staff_requests.html", context={
-            "staff_requests":staff_requests
+            "staff_requests":staff_requests.filter(status = "I"),
+            "staff_completed":staff_requests.filter(status = "C"),
         } )
 
     def post(self, request ):
