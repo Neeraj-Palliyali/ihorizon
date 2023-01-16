@@ -30,7 +30,7 @@ class RequestModel(models.Model):
                 else:
                     return str(int(time_gap.seconds/60)) + " Minutes "
             else:
-                return str(int(time_gap.seconds/(60**2))) + " Minutes "
+                return str(int(time_gap.seconds/(60**2))) + " Hours "
         else:
             return str(time_gap.days) + " days "
     
